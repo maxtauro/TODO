@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>// TODO</title>
+    <link rel="stylesheet" type="text/css" href=styles/inline.css>
+
+</head>
+<header class="header">
+    <h1 class="header__title">TODO</h1>
+</header>
+
+<main class="main">
+
+    <div class="container">
+        <form>
+            <div class="input-field">
+                <input type="text" required id="addtask">
+                <span class="highlight"></span>
+                <span class="bar"></span>
+                <label>Add Task</label>
+            </div>
+        </form>
+    </div>
+
+    <ul id="myUL"></ul>
+
+    <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
+    <script>
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyCf_9n8PY1PXK20PzYGv1ilw6QTKylyM-M",
+            authDomain: "todo-a196f.firebaseapp.com",
+            databaseURL: "https://todo-a196f.firebaseio.com",
+            projectId: "todo-a196f",
+            storageBucket: "todo-a196f.appspot.com",
+            messagingSenderId: "307902932977"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+    <script src="scripts/app.js" async></script>
+
+
+    <!-- The Modal -->
+    <div id="loginFormModal" class="modal">
+  <span onclick="document.getElementById('loginFormModal').style.display='none'"
+        class="close" title="Close Modal">&times;</span>
+
+        <!-- Modal Content -->
+        <form class="modal-content animate" action="/action_page.php">
+            <!--<div class="imgcontainer">-->
+            <!--<img src="img_avatar2.png" alt="Avatar" class="avatar">-->
+            <!--</div>-->
+
+            <div class="container" id="loginformcontainer">
+
+                <div class="input-field">
+                    <input type="text" name="uname" required>
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label for="uname">Username</label>
+                </div>
+
+                <div class="input-field">
+                    <input type="password" placeholder="Enter Password" name="psw" required>
+                    <span class="highlight"></span>
+                    <span class="bar"></span>
+                    <label for="psw">Password</label>
+                </div>
+
+                <button type="submit">Login</button>
+                <!--<label>-->
+                <!--<input type="checkbox" checked="checked" name="remember"> Remember me-->
+                <!--</label>-->
+            </div>
+
+            <div class="container" style="background-color:#f1f1f1">
+                <button type="button" onclick="document.getElementById('loginFormModal').style.display='none'"
+                        class="cancelbtn">Continue as guest<br />(changes may not be saved)
+                </button>
+                <span class="psw" id="new-user"><a href="#">New user?</a></span>
+            </div>
+
+        </form>
+    </div>
+
+</main>
+
+
+<div class="loader">
+    <svg viewBox="0 0 32 32" with="32" height="32">
+        <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
+    </svg>
+</div>
+
+
+</html>
