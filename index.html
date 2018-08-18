@@ -26,12 +26,12 @@
         </form>
     </div>
 
-    <ul id="myUL"></ul>
+    <ul id="task-list"></ul>
 
     <!-- The Modal -->
     <div id="loginFormModal" class="modal">
-  <span onclick="document.getElementById('loginFormModal').style.display='none'"
-        class="close" title="Close Modal">&times;</span>
+  <!--<span onclick="document.getElementById('loginFormModal').style.display='none'"-->
+        <!--class="close" title="Close Modal">&times;</span>-->
 
         <!-- Modal Content -->
         <form class="modal-content animate" id="loginform">
@@ -72,8 +72,8 @@
     </div>
 
     <div id="newUserModal" class="modal">
-  <span onclick="document.getElementById('newUserModal').style.display='none'"
-        class="close" title="Close Modal">&times;</span>
+  <!--<span onclick="document.getElementById('newUserModal').style.display='none'"-->
+        <!--class="close" title="Close Modal">&times;</span>-->
 
         <!-- Modal Content -->
         <form class="modal-content animate" id="newUserForm">
@@ -113,8 +113,7 @@
         </form>
     </div>
 
-
-
+    <!-- Firebase Library Scripts -->
     <script src="https://www.gstatic.com/firebasejs/5.3.1/firebase.js"></script>
     <script>
         // Initialize Firebase
@@ -129,13 +128,17 @@
         firebase.initializeApp(config);
     </script>
 
+    <!-- App scripts -->
+    <script src="scripts/taskObject.js" async></script>
+    <script src="scripts/taskScripts.js" async></script>
+    <script src="scripts/firebaseScripts.js" async></script>
     <script src="scripts/app.js" async></script>
 
 </main>
 
 
 <div class="loader">
-    <svg viewBox="0 0 32 32" with="32" height="32">
+    <svg viewBox="0 0 32 32" width="32" height="32">
         <circle id="spinner" cx="16" cy="16" r="14" fill="none"></circle>
     </svg>
 </div>
