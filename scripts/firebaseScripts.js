@@ -130,9 +130,6 @@ function checkTaskOnFireBase(taskName) {
     firebase.database().ref('users/' + app.userId + '/tasks/' + taskId + '/checked').set(true);
 }
 
-function getTaskFromFireBase(taskId) {
-    //TODO
-}
 
 
 

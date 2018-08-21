@@ -1,5 +1,3 @@
-//TODO properly encapsulate these functions in an object
-
 'use strict';
 
 // Create a new task, add task to List
@@ -58,44 +56,28 @@ function displayTask(task) {
     span.appendChild(txt);
     li.appendChild(span);
 
-    // Event listener for closing tasks
-    var close = document.getElementsByClassName("close");
-    var i;
-    for (i = 0; i < close.length; i++) {
-        close[i].addEventListener('click', function () {
-            clearTask(this.parentElement, task); //TODO test that this call passes the correct task
-        }, false);
+    if (task.checked) {
+        li.classList.toggle('checked');
     }
 
-    /*var list = document.querySelector('ul');
-    list.addEventListener('click', function (ev) {
-        if (ev.target.tagName === 'LI') {
-            ev.target.classList.toggle('checked');
-        }
-    }, false); */
+    // Event listener for closing tasks
+    span.addEventListener('click', function () {
+        clearTask(this.parentElement, task); //TODO test that this call passes the correct task
+    }, false);
 
     li.addEventListener('click', function (ev) {
 
         var taskName = ev.target.textContent;
-        ev.target.classList.toggle('checked');
 
         if (app.loggedIn) {
+            taskName = taskName.substring(0, taskName.length - 1); // remove the closing X from the text content
             checkTaskOnFireBase(taskName);
         }
+
+        ev.target.classList.toggle('checked');
     }, false);
 
-
-
-    // //Event listener for checking tasks
-    // var list = document.getElementsByClassName('li');
-    //     list.addEventListener('click', function () {
-    //         checkTask(this.parentElement, task); //TODO test that this call passes the correct task
-    //     }, false);
-
-
 }
-
-function checkTask(){}
 
 function clearTask(div, task) {
     div.style.display = "none";

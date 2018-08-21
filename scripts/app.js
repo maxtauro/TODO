@@ -48,15 +48,6 @@ var app = {
     var signoutBtn = document.getElementById('signout-button'); //TODO hide button if signed out
     signoutBtn.addEventListener('click', signOut);
 
-    // EventListener for checking tasks
-        // TODO: add firebase
-    var list = document.querySelector('ul');
-    list.addEventListener('click', function (ev) {
-        if (ev.target.tagName === 'LI') {
-            ev.target.classList.toggle('checked');
-        }
-    }, false);
-
     var addTaskInput = document.getElementById('addtask');
     addTaskInput.addEventListener("keypress", function (e) {
         if (!e) e = window.event;
@@ -81,6 +72,7 @@ var app = {
     signInForm.addEventListener('submit', function (event) {
         event.preventDefault(); // don't refresh when form submits
 
+        // TODO signin on enter
         if (signIn()) {
             var modal = document.getElementById('loginFormModal');
             modal.style.display = "none";
