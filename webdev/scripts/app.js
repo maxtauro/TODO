@@ -1,9 +1,3 @@
-//TODO
-// - fix naming
-// - modularize the code properly
-// - encapsulate firebase methods
-
-//TODO is this global var bad form??
 var app = {
     userId: '',
     isLoading: true,
@@ -23,18 +17,27 @@ var app = {
      *
      ****************************************************************************/
 
-    //TODO tidy up the sign in set up
+    // Create a callback which logs the current auth state
+    firebase.auth().onAuthStateChanged(function(authData) {
+        if (authData) {
+            app.userId = authData.uid;
+            app.loggedIn = true;
+            console.log("User " + authData.uid + " is logged in with " + authData.provider);
+        } else {
+            app.userId = '';
+            app.loggedIn = false
+            console.log("User is logged out");
+        }
+    });
+
     // check if user is logged in
     if (checkLogin()) {
         app.loggedIn = true;
         app.userId = getCurrentUserId();
         loadUserData();
-        //TODO load tasks logic
-        // user is signed in
     }
 
     if (!app.loggedIn) {
-        document.getElementById('signout-button').style.display='none';
         document.getElementById('loginFormModal').style.display='block';
     }
 
@@ -43,21 +46,6 @@ var app = {
      * Event listeners for UI elements
      *
      ****************************************************************************/
-
-    // Signout eventlistener
-    var signoutBtn = document.getElementById('signout-button'); //TODO hide button if signed out
-    signoutBtn.addEventListener('click', signOut);
-
-    var addTaskInput = document.getElementById('addtask');
-    addTaskInput.addEventListener("keypress", function (e) {
-        if (!e) e = window.event;
-        var keyCode = e.keyCode || e.which;
-        if (keyCode == '13') {
-            addTask();
-            return false;
-        }
-    }, false);
-
 
     //Close the signin modal if user clicks outside
     var modal = document.getElementById('loginFormModal');
@@ -98,6 +86,42 @@ var app = {
             var newUserModal  = document.getElementById('newUserModal');
             newUserModal.style.display='none';
         }
+    }, false);
+
+    var addTaskInput = document.getElementById('addtask');
+    addTaskInput.addEventListener("keypress", function (e) {
+        if (!e) e = window.event;
+        var keyCode = e.keyCode || e.which;
+        if (keyCode == '13') {
+            addTask();
+            return false;
+        }
+    }, false);
+
+    // Signout even listener
+    var signoutBtn = document.getElementById('signout-button');
+    signoutBtn.addEventListener('click', function (ev) {
+        // TODO tidy this up
+        signOut();
+        document.getElementById('signout-modal').style.display='none'
+        document.getElementById('loginFormModal').style.display='none'
+        },
+        false);
+
+
+    var userIcon = document.getElementById('user-icon');
+    userIcon.addEventListener('click', function (event) {
+
+        console.log("clicking icon");
+
+        if (app.loggedIn) {
+            document.getElementById('signout-modal').style.display='block';
+        }
+
+        else {
+            document.getElementById('loginFormModal').style.display='block';
+        }
+
     }, false);
 
 

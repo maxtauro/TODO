@@ -17,7 +17,12 @@ function checkLogin() {
 
 }
 
+//TODO we may remove this
 function getCurrentUserId() {
+
+    if (firebase.auth().currentUser === null) {
+        console.log("Tried loading current user id, current user was null")
+    }
     return firebase.auth().currentUser.uid;
 }
 
@@ -37,8 +42,8 @@ function signIn() {
             return false;
         });
 
-    app.userId = getCurrentUserId();
-    app.loggedIn = true;
+//    app.userId = getCurrentUserId();
+//    app.loggedIn = true;
 
     loadUserData();
     return true;
@@ -51,6 +56,7 @@ function signOut() {
         });
 
     app.loggedIn = false;
+    window.location.reload(true);
 }
 
 function createUser() { //TODO refine user creation

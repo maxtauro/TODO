@@ -80,6 +80,11 @@ div {
     -ms-flex: 1;
     flex: 1; }
 
+#user-icon {
+    position: relative;
+    background-color: #444;
+}
+
 .main {
     padding-top: 60px;
     -webkit-box-flex: 1;
@@ -340,9 +345,6 @@ span.psw {
     font-size: 35px;
     font-weight: bold;
 }
-
-
-
 
 /* Add Zoom Animation */
 .animate {

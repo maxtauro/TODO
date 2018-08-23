@@ -10,7 +10,20 @@
 </head>
 <header class="header">
     <h1 class="header__title">TODO</h1>
-    <button type="button" id="signout-button">Sign Out</button>
+
+    <!--<div class='clickable' onclick='alert("WOW")'>-->
+
+        <!--<object type="image/svg+xml" data="img/baseline-account_box-24px.svg" width="25" height="25" id="user-icon">-->
+            <!--Your browser does not support SVG.-->
+        <!--</object>-->
+
+    <!--</div>-->
+
+    <div>
+        <img src="img/baseline_account_box_black_18dp.png" width="25" height="25" id="user-icon"/>
+    </div>
+
+
 </header>
 
 <main class="main">
@@ -30,9 +43,6 @@
 
     <!-- The Modal -->
     <div id="loginFormModal" class="modal">
-  <!--<span onclick="document.getElementById('loginFormModal').style.display='none'"-->
-        <!--class="close" title="Close Modal">&times;</span>-->
-
         <!-- Modal Content -->
         <form class="modal-content animate" id="loginform">
             <!--<div class="imgcontainer">-->
@@ -72,9 +82,6 @@
     </div>
 
     <div id="newUserModal" class="modal">
-  <!--<span onclick="document.getElementById('newUserModal').style.display='none'"-->
-        <!--class="close" title="Close Modal">&times;</span>-->
-
         <!-- Modal Content -->
         <form class="modal-content animate" id="newUserForm">
 
@@ -111,6 +118,20 @@
             </div>
 
         </form>
+    </div>
+
+    <div id="signout-modal" class="modal">
+        <!-- Modal Content -->
+        <div class="modal-content animate">
+            <h3>
+                Would you like to signout?
+            </h3>
+            <button type="submit" id="signout-button">Signout</button>
+
+            <button type="button" onclick="document.getElementById('signout-modal').style.display='none'"
+                    class="cancelbtn">Cancel
+            </button>
+        </div>
     </div>
 
     <!-- Firebase Library Scripts -->
