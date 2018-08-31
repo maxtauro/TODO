@@ -1,21 +1,39 @@
 package com.maxtauro.todo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.firebase.ui.auth.ui.User;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.FirebaseDatabase;
+
 public class TaskListActivity extends AppCompatActivity {
+
+    //View
+    RecyclerView listTasksRecyclerView;
+    RecyclerView.LayoutManager layoutManager;
+
+    private DialogFragment dialog_AddTask = new DialogFragmentAddTask();
+    private FirebaseHelper firebaseHelper = new FirebaseHelper();
+
+    FirebaseRecyclerAdapterTaskList adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
 
+        //TODO declare these w/ proper scope as member vars
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
         setSupportActionBar(toolbar);
@@ -24,10 +42,19 @@ public class TaskListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                dialog_AddTask.show(getSupportFragmentManager(), "add task dialog");
             }
         });
+
+        //recycler view init
+        listTasksRecyclerView = (RecyclerView) findViewById(R.id.taskList);
+        listTasksRecyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(this);
+        listTasksRecyclerView.setLayoutManager(layoutManager);
+
+
+        firebaseHelper.setupSystem();
+        updateList();
     }
 
     @Override
@@ -51,4 +78,23 @@ public class TaskListActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void addTask(String newTaskName) {
+        firebaseHelper.addTask(newTaskName);
+    }
+
+    private void updateList() {
+        adapter = new FirebaseRecyclerAdapterTaskList(
+                Task.class,
+                R.layout.task_layout,
+                TaskListViewHolder.class,
+                firebaseHelper.loadTaskList()
+                );
+
+        adapter.notifyDataSetChanged();
+        listTasksRecyclerView.setAdapter(adapter);
+        firebaseHelper.setAdapter(adapter);
+
+    }
+
 }
