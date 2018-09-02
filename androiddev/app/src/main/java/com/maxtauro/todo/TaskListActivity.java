@@ -85,6 +85,7 @@ public class TaskListActivity extends AppCompatActivity {
 
     public void addTask(String newTaskName) {
         firebaseHelper.addTask(newTaskName);
+        adapter.notifyDataSetChanged();
     }
 
     private void updateList() {

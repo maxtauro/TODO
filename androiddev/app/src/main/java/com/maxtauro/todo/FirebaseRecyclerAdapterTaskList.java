@@ -27,7 +27,7 @@ public class FirebaseRecyclerAdapterTaskList extends FirebaseRecyclerAdapter<Tas
     @Override
     protected void populateViewHolder(final TaskListViewHolder viewHolder, final Task model, int position) {
 
-        viewHolder.txtTaskName.setText(model.getText());
+        viewHolder.txtTaskName.setText(model.getTaskName());
         viewHolder.setRef(getRef(position));
         viewHolder.checkTask(model.isChecked());
 

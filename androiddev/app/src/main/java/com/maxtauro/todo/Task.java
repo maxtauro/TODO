@@ -13,13 +13,19 @@ public class Task {
         checked = false;
     }
 
+    Task(int taskId, String taskName) {
+        this.checked = false;
+        this.taskId = taskId;
+        this.taskName = taskName;
+    }
+
     Task(boolean checked, int taskId, String taskName) {
         this.checked = checked;
         this.taskId = taskId;
         this.taskName = taskName;
     }
 
-    public int getId() {
+    public int getTaskId() {
         return taskId;
     }
 
@@ -27,7 +33,7 @@ public class Task {
         this.taskId = id;
     }
 
-    public String getText() {
+    public String getTaskName() {
         return taskName;
     }
 
