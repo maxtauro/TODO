@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -52,6 +53,9 @@ public class TaskListActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         listTasksRecyclerView.setLayoutManager(layoutManager);
 
+        SwipeController swipeController = new SwipeController();
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(listTasksRecyclerView);
 
         firebaseHelper.setupSystem();
         updateList();

@@ -3,7 +3,7 @@ package com.maxtauro.todo;
 public class Task {
     //TODO fix naming
 
-    private boolean checked = false, cleared = false;
+    private boolean checked = false;
     private int taskId;
     private String taskName;
 
@@ -11,12 +11,10 @@ public class Task {
         taskId = -1;
         taskName = "";
         checked = false;
-        cleared = false;
     }
 
-    Task(boolean checked, boolean cleared, int taskId, String taskName) {
+    Task(boolean checked, int taskId, String taskName) {
         this.checked = checked;
-        this.cleared = cleared;
         this.taskId = taskId;
         this.taskName = taskName;
     }
@@ -46,12 +44,4 @@ public class Task {
         else checked = true;
     }
 
-    public boolean isCleared() {
-        return cleared;
-    }
-
-    public void setCleared() {
-        if (cleared) cleared = false;
-        else cleared = true;
-    }
 }

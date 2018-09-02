@@ -51,6 +51,10 @@ public class FirebaseHelper {
       //  taskList.child(String.valueOf(++(currUser.lastTaskId))).setValue()
     }
 
+    public void checkTask(DatabaseReference taskRef, boolean check) {
+        taskRef.child("checked").setValue(check);
+    }
+
     public void setupSystem() {
 
     }
