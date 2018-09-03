@@ -16,7 +16,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="?attr/colorPrimary" />
+        android:background="?attr/colorPrimaryDark" />
 
     <View
         android:id="@+id/anchor_dropdown"
@@ -30,16 +30,25 @@
         android:layout_height="match_parent"
         ></android.support.v7.widget.RecyclerView>
 
+    <Button
+        android:id="@+id/clear_button"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/add_task_button"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="19dp"
+        android:text="Clear" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_task_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="50dp"
-        android:layout_marginRight="25dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="32dp"
         android:src="@drawable/ic_add_black_24dp"
         app:backgroundTint="?attr/colorButtonNormal" />
 

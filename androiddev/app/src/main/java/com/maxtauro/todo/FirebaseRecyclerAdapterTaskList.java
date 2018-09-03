@@ -45,8 +45,8 @@ public class FirebaseRecyclerAdapterTaskList extends FirebaseRecyclerAdapter<Tas
     protected Task parseSnapshot(DataSnapshot snapshot) {
         Task task = new Task(
                 (Boolean) snapshot.child("checked").getValue(),
-                ((Long) snapshot.child("task_id").getValue()).intValue(),
-                (String) snapshot.child("task_name").getValue()
+                ((Long) snapshot.child("taskId").getValue()).intValue(),
+                (String) snapshot.child("taskName").getValue()
         );
         return task;
     }

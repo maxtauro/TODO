@@ -1,6 +1,5 @@
 package com.maxtauro.todo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
@@ -9,14 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import com.firebase.ui.auth.ui.User;
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.FirebaseDatabase;
+import android.widget.Button;
 
 public class TaskListActivity extends AppCompatActivity {
 
@@ -29,21 +24,36 @@ public class TaskListActivity extends AppCompatActivity {
 
     FirebaseRecyclerAdapterTaskList adapter;
 
+
+    // UI elements
+    private Toolbar toolbar;
+    private Button clearBtn;
+    private FloatingActionButton addTaskButton;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
 
-        //TODO declare these w/ proper scope as member vars
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(R.string.app_name);
+        toolbar.setTitleTextColor(0xFF474444);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.add_task_button);
-        fab.setOnClickListener(new View.OnClickListener() {
+        addTaskButton = (FloatingActionButton) findViewById(R.id.add_task_button);
+        addTaskButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 dialog_AddTask.show(getSupportFragmentManager(), "add task dialog");
+            }
+        });
+
+        clearBtn = (Button) findViewById(R.id.clear_button);
+        clearBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firebaseHelper.clear();
             }
         });
 
@@ -57,7 +67,6 @@ public class TaskListActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
         itemTouchhelper.attachToRecyclerView(listTasksRecyclerView);
 
-        firebaseHelper.setupSystem();
         updateList();
     }
 

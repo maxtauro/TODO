@@ -6,58 +6,52 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class FirebaseHelper {
 
-
-
     private class User {
         String userId;
-        Task[] tasks = {};
+        ArrayList<Task> taskList = new ArrayList<Task>();
         int lastTaskId;
     }
 
     User currUser;
     private DatabaseReference currUserRef;
-    private DatabaseReference taskList;
+    private DatabaseReference taskListRef;
 
     public FirebaseRecyclerAdapter<Task,TaskListViewHolder> adapter;
 
     public FirebaseHelper() {
         currUser = updateCurrUser();
-        taskList = loadTaskList();
+        taskListRef = loadTaskList();
     }
 
     public DatabaseReference loadTaskList() {
         String userId = currUser.userId;
         currUserRef = FirebaseDatabase.getInstance().getReference().child("users").child(userId);
-        DatabaseReference taskRef = currUserRef.child("tasks");
+        final DatabaseReference taskRef = currUserRef.child("tasks");
 
         taskRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
-                try {
-                    ArrayList<Integer> taskIdList = new ArrayList<Integer>();
-                    for (HashMap o: (ArrayList<HashMap>) dataSnapshot.getValue()) {
-
-                        if (o != null) {
-                            int id = ((Long) o.get("task_id")).intValue();
-                            taskIdList.add(id);
-                        }
-
-                    }
-                    setLastTaskId(taskIdList);
+                if (!currUser.taskList.isEmpty()) {
+                    currUser.taskList.clear();
                 }
 
-                catch (ClassCastException e) {
-                    //TODO implement better exception safety
+                for (DataSnapshot taskSnapshot: dataSnapshot.getChildren()) {
+                    Task task = new Task(
+                            (Boolean) taskSnapshot.child("checked").getValue(),
+                            ((Long) taskSnapshot.child("taskId").getValue()).intValue(),
+                            (String) taskSnapshot.child("taskName").getValue()
+                    );
+                    currUser.taskList.add(task);
                 }
+
+                setLastTaskId();
             }
 
             @Override
@@ -80,32 +74,33 @@ public class FirebaseHelper {
 
     public void addTask(String newTaskName) {
         Task newTask = new Task(++(currUser.lastTaskId), newTaskName);
-        DatabaseReference newTaskRef = taskList.child(String.valueOf((currUser.lastTaskId)));
+        DatabaseReference newTaskRef = taskListRef.child(String.valueOf((currUser.lastTaskId)));
 
-        //TODO figure out how to add these children in one call, currently onDataChange is called
-        // each time a child is added, this is inefficient and error prone
-        newTaskRef.child("task_id").setValue(newTask.getTaskId());
-        newTaskRef.child("checked").setValue(newTask.isChecked());
-        newTaskRef.child("task_name").setValue(newTask.getTaskName());
-
+        newTaskRef.setValue(newTask);
     }
 
     public void checkTask(DatabaseReference taskRef, boolean check) {
         taskRef.child("checked").setValue(check);
     }
 
-    public void setupSystem() {
-
-    }
-
-    private void setLastTaskId(ArrayList<Integer> taskIdList) {
+    private void setLastTaskId() {
         int lastTaskId = 0;
-        for (int i: taskIdList) {
-            if (i > lastTaskId) {
-                lastTaskId = i;
+
+        for (Task task: currUser.taskList) {
+            if (task.getTaskId() > lastTaskId) {
+                lastTaskId = task.getTaskId();
             }
         }
+
         currUser.lastTaskId = lastTaskId;
+    }
+
+    public void clear() {
+        for (Task task : currUser.taskList) {
+            if (task.isChecked()){
+                taskListRef.child(String.valueOf(task.getTaskId())).removeValue();
+            }
+        }
     }
 
 }
