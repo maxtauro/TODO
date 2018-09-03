@@ -1,13 +1,12 @@
 package com.maxtauro.todo;
 
 public class Task {
-    //TODO fix naming
 
     private boolean checked = false;
     private int taskId;
     private String taskName;
 
-    Task(){
+    Task(){ // default constructor is needed for firebase
         taskId = -1;
         taskName = "";
         checked = false;

@@ -59,6 +59,6 @@ public class TaskListViewHolder extends RecyclerView.ViewHolder implements View.
     }
 
     public void clearTask() {
-        taskRef.removeValue(); //TODO put this in firebaseHelper
+        taskRef.removeValue();
     }
 }

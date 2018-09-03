@@ -61,7 +61,6 @@ public class FirebaseHelper {
         return taskRef;
     }
 
-    //TODO tidy this up
     public User updateCurrUser() {
         currUser = new User();
         currUser.userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
