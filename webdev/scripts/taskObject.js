@@ -2,7 +2,6 @@ function Task(text_) {
     this.id = -1;
     this.text = text_;
     this.checked = false;
-    this.cleared = false;
 
     this.check = function () {
         if (this.checked) {
@@ -10,15 +9,6 @@ function Task(text_) {
         }
         else {
             this.checked = true;
-        }
-    }
-
-    this.clear = function() {
-        if (this.cleared) {
-            this.cleared = false;
-        }
-        else {
-            this.cleared = true;
         }
     }
 

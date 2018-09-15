@@ -114,12 +114,11 @@ function addTaskToFireBase(task) {
         task_id: task.id,
         task_name: task.text,
         checked: task.checked,
-        cleared: task.cleared
     });
 }
 
 function clearTaskOnFireBase(task) {
-    firebase.database().ref('users/' + app.userId + '/tasks/' + task.id + '/cleared').set(true);
+    firebase.database().ref('users/' + app.userId + '/tasks/').child(task.id).remove();
 }
 
 function checkTaskOnFireBase(taskName) {

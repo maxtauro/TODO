@@ -25,18 +25,15 @@ function addTask() {
 function displayTasks(tasks) {
 
     for(var i = 0; i < tasks.length; ++i) {
-        if (tasks[i].cleared === false) {
+        //TODO make copy ctor
+        var task = new Task();
+        task.constructor(tasks[i].task_id, tasks[i].task_name);
+        task.checked = tasks[i].checked;
 
-            //TODO make copy ctor
-            var task = new Task();
-            task.constructor(tasks[i].task_id, tasks[i].task_name);
-            task.cleared = tasks[i].cleared;
-            task.checked = tasks[i].checked;
+        app.tasks.push(task);
 
-            app.tasks.push(task);
+        displayTask(task);
 
-            displayTask(task);
-        }
     }
 }
 
