@@ -112,9 +112,9 @@ function loadUserData() {
 function addTaskToFireBase(task) {
 
     firebase.database().ref('users/' + app.userId + '/tasks/' + task.id).set({
-        task_id: task.id,
-        task_name: task.text,
         checked: task.checked,
+        taskId: task.id,
+        taskName: task.text
     });
 }
 
