@@ -1,27 +1,30 @@
 //TODO properly encapsulate these functions in an object
 
-
 'use strict';
 
-// Get a reference to the database service
-var database = firebase.database();
-
-
-// check if user is logged in (returns bool)
-function checkLogin() {
-
-    firebase.auth().onAuthStateChanged(function (user) {
-        if (user) return true;
-        else return false;
+// Create a callback which logs the current auth state
+function createAuthCallback() {
+    firebase.auth().onAuthStateChanged(function(authData) {
+        if (authData) {
+            app.userId = authData.uid;
+            app.loggedIn = true;
+            loadUserData();
+            console.log("User " + authData.uid + " is logged in with " + authData.provider);
+        } else {
+            app.userId = '';
+            app.loggedIn = false;
+            document.getElementById('loginFormModal').style.display='block';
+            console.log("User is logged out");
+        }
     });
 
 }
 
-//TODO we may remove this
 function getCurrentUserId() {
 
     if (firebase.auth().currentUser === null) {
         console.log("Tried loading current user id, current user was null")
+        return null;
     }
     return firebase.auth().currentUser.uid;
 }
@@ -42,8 +45,8 @@ function signIn() {
             return false;
         });
 
-//    app.userId = getCurrentUserId();
-//    app.loggedIn = true;
+    app.userId = getCurrentUserId();
+    app.loggedIn = true;
 
     loadUserData();
     return true;
@@ -52,25 +55,23 @@ function signIn() {
 function signOut() {
     firebase.auth().signOut()
         .catch(function (err) {
-            //TODO Handle errors
+            console.log("Sign out error: " + err);
         });
 
     app.loggedIn = false;
     window.location.reload(true);
 }
 
-function createUser() { //TODO refine user creation
+function createUser() {
     var username = document.getElementById("new-username").value;
     var password = document.getElementById('new-password').value;
     var confirmPassword = document.getElementById('confirm-password').value;
 
-    //TODO should the username persist?
-    document.getElementById("new-username").value = '';
     document.getElementById('new-password').value = '';
     document.getElementById('confirm-password').value = '';
 
     if (password === confirmPassword) {
-        // Register a new user // sick
+        // Register a new user
         firebase.auth().createUserWithEmailAndPassword(username, password)
             .catch(function (err) {
                 alert(err); //TODO put meaningful error response
@@ -89,7 +90,7 @@ function loadUserData() {
 
     function getMaxTaskId(tasks) {
 
-        if (tasks.length < 1) return;
+        if (tasks === null || tasks.length < 1) return;
 
         var maxId = tasks[0].task_id;
 
@@ -100,7 +101,7 @@ function loadUserData() {
         app.lastTaskId = ++maxId;
     }
 
-    var tasksRef = firebase.database().ref('users/' + app.userId + '/tasks');
+    var tasksRef = firebase.database().ref('users/' + getCurrentUserId() + '/tasks');
     tasksRef.once('value').then(function (snapshot) {
         getMaxTaskId(snapshot.val());
         displayTasks(snapshot.val());
@@ -111,15 +112,14 @@ function loadUserData() {
 function addTaskToFireBase(task) {
 
     firebase.database().ref('users/' + app.userId + '/tasks/' + task.id).set({
-        task_id: task.id,
-        task_name: task.text,
         checked: task.checked,
-        cleared: task.cleared
+        taskId: task.id,
+        taskName: task.text
     });
 }
 
 function clearTaskOnFireBase(task) {
-    firebase.database().ref('users/' + app.userId + '/tasks/' + task.id + '/cleared').set(true);
+    firebase.database().ref('users/' + app.userId + '/tasks/').child(task.id).remove();
 }
 
 function checkTaskOnFireBase(taskName) {

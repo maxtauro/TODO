@@ -17,29 +17,7 @@ var app = {
      *
      ****************************************************************************/
 
-    // Create a callback which logs the current auth state
-    firebase.auth().onAuthStateChanged(function(authData) {
-        if (authData) {
-            app.userId = authData.uid;
-            app.loggedIn = true;
-            console.log("User " + authData.uid + " is logged in with " + authData.provider);
-        } else {
-            app.userId = '';
-            app.loggedIn = false
-            console.log("User is logged out");
-        }
-    });
-
-    // check if user is logged in
-    if (checkLogin()) {
-        app.loggedIn = true;
-        app.userId = getCurrentUserId();
-        loadUserData();
-    }
-
-    if (!app.loggedIn) {
-        document.getElementById('loginFormModal').style.display='block';
-    }
+    createAuthCallback();
 
     /*****************************************************************************
      *
@@ -56,16 +34,29 @@ var app = {
     }, false);
 
     //Trigger firebase sign-in
-    var signInForm = document.getElementById('loginform');
-    signInForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // don't refresh when form submits
-
-        // TODO signin on enter
+    var loginButton = document.getElementById('loginbutton');
+    loginButton.addEventListener('click', function (event) {
         if (signIn()) {
-            var modal = document.getElementById('loginFormModal');
-            modal.style.display = "none";
+                    var modal = document.getElementById('loginFormModal');
+                    modal.style.display = "none";
+                }
+    }, false);
+
+    var signInForm = document.getElementById('loginform');
+    signInForm.addEventListener("keypress", function (e) {
+        if (!e) e = window.event;
+        var keyCode = e.keyCode || e.which;
+        if (keyCode == '13') {
+
+            if (signIn()) {
+                var modal = document.getElementById('loginFormModal');
+                modal.style.display = "none";
+            }
+
+            return false;
         }
     }, false);
+
 
     //New user link event listener
     var newUserLink = document.getElementById('new-user');
@@ -78,14 +69,12 @@ var app = {
         }, false);
 
     // Trigger create User Event
-    var newUserForm = document.getElementById('newUserForm');
-    newUserForm.addEventListener('submit', function (event) {
-        event.preventDefault(); // don't refresh when form submits
-
+    var createUserButton = document.getElementById('new-user-button');
+    createUserButton.addEventListener('click', function (event) {
         if (createUser()) {
-            var newUserModal  = document.getElementById('newUserModal');
-            newUserModal.style.display='none';
-        }
+                var newUserModal  = document.getElementById('newUserModal');
+                newUserModal.style.display='none';
+            }
     }, false);
 
     var addTaskInput = document.getElementById('addtask');
@@ -101,20 +90,18 @@ var app = {
     // Signout even listener
     var signoutBtn = document.getElementById('signout-button');
     signoutBtn.addEventListener('click', function (ev) {
-        // TODO tidy this up
         signOut();
         document.getElementById('signout-modal').style.display='none'
         document.getElementById('loginFormModal').style.display='none'
         },
         false);
 
-
     var userIcon = document.getElementById('user-icon');
     userIcon.addEventListener('click', function (event) {
 
         console.log("clicking icon");
 
-        if (app.loggedIn) {
+        if (getCurrentUserId() !== null) {
             document.getElementById('signout-modal').style.display='block';
         }
 
@@ -124,10 +111,8 @@ var app = {
 
     }, false);
 
-
     if (app.isLoading) {
         app.spinner.setAttribute('hidden', true);
-        app.container.removeAttribute('hidden');
         app.isLoading = false;
     }
 
