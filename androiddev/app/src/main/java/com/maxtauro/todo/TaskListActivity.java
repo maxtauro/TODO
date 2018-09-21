@@ -1,5 +1,6 @@
 package com.maxtauro.todo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
@@ -20,16 +21,16 @@ public class TaskListActivity extends AppCompatActivity {
     RecyclerView.LayoutManager layoutManager;
 
     private DialogFragment dialog_AddTask = new DialogFragmentAddTask();
+    private DialogFragment dialog_Signout = new DialogFragmentSignOut();
+
     private FirebaseHelper firebaseHelper = new FirebaseHelper();
 
     FirebaseRecyclerAdapterTaskList adapter;
-
 
     // UI elements
     private Toolbar toolbar;
     private Button clearBtn;
     private FloatingActionButton addTaskButton;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class TaskListActivity extends AppCompatActivity {
         ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
         itemTouchhelper.attachToRecyclerView(listTasksRecyclerView);
 
-        updateList();
+        loadTaskList();
     }
 
     @Override
@@ -85,8 +86,8 @@ public class TaskListActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_signout) {
+            dialog_Signout.show(getSupportFragmentManager(), "sign out dialog");
         }
 
         return super.onOptionsItemSelected(item);
@@ -95,9 +96,10 @@ public class TaskListActivity extends AppCompatActivity {
     public void addTask(String newTaskName) {
         firebaseHelper.addTask(newTaskName);
         adapter.notifyDataSetChanged();
+        scrollToBottom();
     }
 
-    private void updateList() {
+    private void loadTaskList() {
         adapter = new FirebaseRecyclerAdapterTaskList(
                 Task.class,
                 R.layout.task_layout,
@@ -111,4 +113,15 @@ public class TaskListActivity extends AppCompatActivity {
 
     }
 
+    //TODO scroll to bottom right when app loads list
+    private void scrollToBottom(){
+        listTasksRecyclerView.smoothScrollToPosition(adapter.getItemCount() + 1);
+    }
+
+    public void signOut() {
+        firebaseHelper.signOut();
+        Intent intent = new Intent(TaskListActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

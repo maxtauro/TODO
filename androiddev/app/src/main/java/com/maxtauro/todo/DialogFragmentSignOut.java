@@ -8,29 +8,24 @@ import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.EditText;
 
-public class DialogFragmentAddTask extends DialogFragment {
+public class DialogFragmentSignOut extends DialogFragment {
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
+    public Dialog onCreateDialog(Bundle savedInstanceState){
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         LayoutInflater inflater = getActivity().getLayoutInflater();
-
-        View layout = inflater.inflate(R.layout.dialog_add_task,null);
-        final EditText input = (EditText) layout.findViewById(R.id.task_name);
-        input.requestFocus(); //TODO, test that this works
+        View layout = inflater.inflate(R.layout.dialog_signout,null);
 
         builder.setView(layout)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setMessage(R.string.signout_string)
+                .setPositiveButton("Sign out", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Log.e("Edit Text",String.valueOf(input.getText()));
-
+                        Log.e("","User clicked signout button");
                         TaskListActivity callingActivity = (TaskListActivity) getActivity();
-                        callingActivity.addTask(String.valueOf(input.getText()));
+                        callingActivity.signOut();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -39,6 +34,7 @@ public class DialogFragmentAddTask extends DialogFragment {
                         dismiss();
                     }
                 });
+
 
         return builder.create();
     }

@@ -39,6 +39,8 @@ public class FirebaseRecyclerAdapterTaskList extends FirebaseRecyclerAdapter<Tas
                 notifyDataSetChanged();
             }
         };
+
+
     }
 
     @Override

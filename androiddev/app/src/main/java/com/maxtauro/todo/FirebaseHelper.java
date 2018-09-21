@@ -1,5 +1,7 @@
 package com.maxtauro.todo;
 
+import android.util.Log;
+
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -43,12 +45,19 @@ public class FirebaseHelper {
                 }
 
                 for (DataSnapshot taskSnapshot: dataSnapshot.getChildren()) {
-                    Task task = new Task(
-                            (Boolean) taskSnapshot.child("checked").getValue(),
-                            ((Long) taskSnapshot.child("taskId").getValue()).intValue(),
-                            (String) taskSnapshot.child("taskName").getValue()
-                    );
-                    currUser.taskList.add(task);
+                    try {
+                        Task task = new Task(
+                                (Boolean) taskSnapshot.child("checked").getValue(),
+                                ((Long) taskSnapshot.child("taskId").getValue()).intValue(),
+                                (String) taskSnapshot.child("taskName").getValue()
+                        );
+                        currUser.taskList.add(task);
+                    }
+
+                    //TODO create an exception class for this
+                    catch (NullPointerException e) {
+                        Log.d("", "onDataChange: Task is missing fields in firebase" + taskSnapshot.getValue());
+                    }
                 }
 
                 setLastTaskId();
@@ -100,6 +109,10 @@ public class FirebaseHelper {
                 taskListRef.child(String.valueOf(task.getTaskId())).removeValue();
             }
         }
+    }
+
+    public void signOut() {
+        FirebaseAuth.getInstance().signOut();
     }
 
 }
