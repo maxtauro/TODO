@@ -35,6 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="8"
             android:text="test@gmail.com"
+            android:textColor="@color/white"
             android:textSize="24sp" />
 
     </LinearLayout>
